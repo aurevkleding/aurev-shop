@@ -1,246 +1,241 @@
-# To-Do List Application
+```
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    🛍️  A U R E V  C L O T H I N G  🛍️
+    Premium Fashion for Modern Style
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+```
 
-A modern, feature-rich to-do list application with local storage functionality. Stay organized and productive!
+# AUREV - Professional E-Commerce Clothing Shop
 
-## Features
+A modern, professional e-commerce website for AUREV clothing brand featuring premium quality t-shirts and jeans in red, blue, and white colors.
 
-### ✨ Core Features
-- **Add Tasks**: Quickly add new tasks with a simple input
-- **Mark Complete**: Check off completed tasks
-- **Edit Tasks**: Update task description and priority anytime
-- **Delete Tasks**: Remove individual tasks
-- **Priority Levels**: Set tasks as High, Medium, or Low priority
-- **Task Timestamps**: Each task shows the date it was created
+## 🌟 Features
 
-### 💾 Local Storage
-- **Persistent Storage**: All tasks are saved to browser's local storage
-- **Auto-Save**: Tasks are automatically saved after any action
-- **Data Persistence**: Your tasks survive browser restarts
+### 📱 Professional Design
+- **Modern UI/UX**: Clean and contemporary design with smooth animations
+- **Brand Identity**: Professional AUREV branding with logo and color scheme
+- **Responsive Layout**: Fully responsive design for all devices (desktop, tablet, mobile)
+- **Smooth Scrolling**: Elegant smooth scroll navigation throughout the site
 
-### 🎯 Filter & View Options
-- **All Tasks**: View every task in your list
-- **Pending**: Show only incomplete tasks
-- **Completed**: View finished tasks
-- **High Priority**: Filter to show only high-priority items
+### 🛒 Shopping Features
+- **Product Catalog**: 
+  - T-Shirts Collection (3 colors: Red, Blue, White)
+  - Jeans Collection (3 colors: Red, Blue, White)
+- **Shopping Cart**: Functional shopping cart with add/remove items
+- **Cart Management**: 
+  - Add items to cart
+  - Remove items
+  - View cart total
+  - Persistent cart storage (LocalStorage)
+- **Product Details**: Price, color, and product information display
 
-### 📊 Statistics
-- **Total Tasks**: Count of all tasks
-- **Completed**: Number of finished tasks
-- **Pending**: Number of incomplete tasks
+### 🎨 Color Scheme
+- **Primary Red**: `#DC143C` - Brand color for T-shirts & Jeans
+- **Primary Blue**: `#1E3A8A` - Brand color for T-shirts & Jeans
+- **Pure White**: `#FFFFFF` - Elegant white products
+- **Gradients**: Modern gradient backgrounds combining red and blue
 
-### 🛠️ Management Tools
-- **Clear Completed**: Remove all finished tasks at once
-- **Clear All**: Delete all tasks (with confirmation)
-- **Search/Filter**: Organize tasks by status and priority
+### 🧭 Navigation
+- **Sticky Navigation Bar**: Always accessible at the top
+- **Hamburger Menu**: Mobile-friendly menu toggle
+- **Quick Links**: Navigate to Home, T-Shirts, Jeans, Contact
+- **Smooth Anchors**: Click navigation between sections
 
-### 📱 Responsive Design
-- Works perfectly on desktop, tablet, and mobile
-- Touch-friendly interface
-- Optimized for all screen sizes
+### 📬 Contact Section
+- Phone contact information
+- Email support
+- Store address
+- Professional contact cards
 
-## Project Structure
+### 💾 Data Persistence
+- **LocalStorage Integration**: Shopping cart saved automatically
+- **Auto-Load**: Cart persists across browser sessions
+
+## 🎯 Sections
+
+### Hero Section
+Eye-catching welcome area with:
+- AUREV brand name
+- Tagline: "Premium Quality Clothing for Modern Style"
+- Call-to-action button directing to products
+
+### T-Shirts Section
+Three premium t-shirt options:
+1. **Classic Red Tee** - $29.99
+2. **Ocean Blue Tee** - $29.99
+3. **Pure White Tee** - $29.99
+
+### Jeans Section
+Three premium denim options:
+1. **Crimson Jeans** - $59.99
+2. **Classic Blue Denim** - $59.99
+3. **Elegant White Denim** - $59.99
+
+### Contact Section
+Professional contact information with:
+- Phone support
+- Email contact
+- Store location
+- Glassmorphism design cards
+
+### Footer
+Complete footer with:
+- Brand information
+- Quick navigation links
+- Social media links
+- Copyright information
+
+## 🚀 Quick Start
+
+### Option 1: GitHub Pages (Live Demo)
+1. Go to Repository Settings → Pages
+2. Select **main** branch as source
+3. Your site will be live at: `https://aurevkleding.github.io/aurev-shop/`
+
+### Option 2: Local Preview
+1. Clone or download the repository
+2. Open `index.html` in your browser
+3. Or use a local server:
+   ```bash
+   python -m http.server 8000
+   # or
+   npx http-server
+   ```
+
+## 📁 Project Structure
 
 ```
-todo-app/
-├── index.html       # Main HTML file
-├── styles.css       # Complete styling
-├── script.js        # Application logic
+aurev-shop/
+├── index.html       # Main HTML file with structure
+├── styles.css       # Complete professional styling
+├── script.js        # E-commerce functionality
 └── README.md        # This file
 ```
 
-## How to Use
+## 🎨 Customization
 
-### Adding a Task
-1. Type your task in the input field
-2. Select a priority level (Low, Medium, or High)
-3. Click "Add Task" or press Enter
+### Change Colors
+Edit CSS variables in `styles.css`:
+```css
+:root {
+    --primary-red: #DC143C;      /* Change to your red */
+    --primary-blue: #1E3A8A;     /* Change to your blue */
+    --primary-white: #FFFFFF;    /* White stays white */
+}
+```
 
-### Completing a Task
-- Click the checkbox next to a task to mark it as complete
-- Completed tasks appear grayed out with strikethrough text
+### Update Prices
+Edit product prices in `index.html`:
+```html
+<p class="price">$29.99</p>  <!-- Change the price -->
+```
 
-### Editing a Task
-1. Click the edit button (pencil icon) on any task
-2. Update the task description and priority
-3. Click "Save Changes"
+### Modify Products
+Add new products to the grid in `index.html`:
+```html
+<div class="product-card">
+    <div class="product-image blue-bg">
+        <i class="fas fa-shirt"></i>
+    </div>
+    <div class="product-info">
+        <h3>Your Product Name</h3>
+        <p class="color-tag">Your Color</p>
+        <p class="price">$XX.XX</p>
+        <button class="add-to-cart">Add to Cart</button>
+    </div>
+</div>
+```
 
-### Deleting a Task
-- Click the delete button (trash icon) on any task
-- Confirm the deletion when prompted
+### Add Social Links
+Update footer social links in `index.html`:
+```html
+<a href="https://facebook.com/aurev"><i class="fab fa-facebook"></i></a>
+<a href="https://instagram.com/aurev"><i class="fab fa-instagram"></i></a>
+<a href="https://twitter.com/aurev"><i class="fab fa-twitter"></i></a>
+```
 
-### Filtering Tasks
-- Use the filter buttons to view different task categories
-- Filters: All, Pending, Completed, High Priority
-
-### Clearing Tasks
-- **Clear Completed**: Removes all finished tasks
-- **Clear All**: Removes all tasks (use with caution!)
-
-## Technology Stack
+## 🛠️ Technology Stack
 
 ### Frontend
 - **HTML5**: Semantic markup
-- **CSS3**: Modern styling with gradients and flexbox/grid
+- **CSS3**: Modern styling with gradients, flexbox, and grid
 - **Vanilla JavaScript**: Pure JS, no frameworks
-- **Font Awesome**: Icons
+- **Font Awesome**: Professional icons
 
-### Storage
-- **Local Storage API**: Browser-based persistent storage
-- **JSON**: Data serialization format
+### Features
+- **LocalStorage API**: Shopping cart persistence
+- **Responsive Design**: Mobile-first approach
+- **Smooth Animations**: CSS and JavaScript animations
+- **CSS Grid & Flexbox**: Modern layout techniques
 
-## Customization
-
-### Change Color Scheme
-Edit the gradient colors in `styles.css`:
-```css
-/* Primary gradient */
-background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-
-/* Change to your colors */
-background: linear-gradient(135deg, #YOUR_COLOR_1 0%, #YOUR_COLOR_2 100%);
-```
-
-### Modify Priority Colors
-Find the priority color definitions in `styles.css`:
-```css
-.task-priority.high {
-    background: #ff6b6b;  /* Red */
-}
-
-.task-priority.medium {
-    background: #ffd93d;  /* Yellow */
-}
-
-.task-priority.low {
-    background: #6bcf7f;  /* Green */
-}
-```
-
-### Adjust Font
-Change the font family in `styles.css`:
-```css
-font-family: 'Your Font Name', sans-serif;
-```
-
-## Browser Support
+## 📱 Browser Support
 
 ✅ Chrome (latest)
 ✅ Firefox (latest)
 ✅ Safari (latest)
 ✅ Edge (latest)
-✅ Mobile browsers
+✅ Mobile browsers (iOS Safari, Chrome Mobile)
 
-## Local Storage Details
+## 🎯 Shopping Cart Features
 
-### What's Stored
-- Task ID (timestamp)
-- Task description text
-- Completion status
-- Priority level
-- Creation date
+### Add to Cart
+- Click any "Add to Cart" button
+- Item added with quantity
+- Toast notification appears
+- Cart badge updates
 
-### Storage Key
-- Key: `todoTasks`
-- Format: JSON array
-- Max size: ~5-10MB (browser dependent)
+### View Cart
+- Click shopping bag icon in navigation
+- See all items with prices
+- View order total
+- Remove individual items
 
-### Viewing Stored Data
-Open browser DevTools:
-1. Press F12 or Right-click → Inspect
-2. Go to Application tab
-3. Navigate to Local Storage
-4. Find the entry for your domain
-5. Look for `todoTasks` key
+### Persist Data
+- Cart automatically saved to browser storage
+- Survives page refresh
+- Clear cart by removing all items
 
-## Tips & Tricks
+## 📊 Performance
 
-### Keyboard Shortcuts
-- **Enter**: Add task when in input field
-- **Escape**: Close edit modal
+- **Lightweight**: ~20KB (HTML + CSS + JS)
+- **Fast Loading**: Optimized assets
+- **Smooth Animations**: GPU-accelerated transitions
+- **Mobile Optimized**: Fast performance on all devices
 
-### Best Practices
-- Set high priority for urgent tasks
-- Clear completed tasks regularly to keep list clean
-- Use specific, actionable task descriptions
-- Review your list daily
+## 🔒 Security
 
-## Advanced Features You Can Add
+- **Local Processing**: All operations on client-side
+- **No External Data**: Shopping cart stays local
+- **HTML Escaping**: Protection against XSS
+- **HTTPS Ready**: Can be deployed with HTTPS
 
-- **Due Dates**: Add date picker for task deadlines
-- **Categories**: Organize tasks by category
-- **Search**: Full-text search functionality
-- **Recurring Tasks**: Automatically repeat certain tasks
-- **Export/Import**: Save tasks as JSON file
-- **Dark Mode**: Toggle dark/light theme
-- **Notifications**: Browser notifications for due tasks
-- **Sorting**: Sort by date, priority, or custom order
-- **Tags**: Label tasks with multiple tags
-- **Cloud Sync**: Sync across devices via backend
+## 🎁 Future Enhancements
 
-## Troubleshooting
+- [ ] Product filtering by size
+- [ ] Search functionality
+- [ ] Product reviews and ratings
+- [ ] Wishlist feature
+- [ ] User accounts and login
+- [ ] Payment gateway integration
+- [ ] Order tracking
+- [ ] Discount codes
+- [ ] Newsletter signup
+- [ ] Dark mode toggle
 
-### Tasks Not Saving
-- Check if local storage is enabled in browser
-- Clear browser cache and reload
-- Check browser console for errors (F12)
+## 📞 Contact
 
-### Tasks Disappeared
-- Check if you cleared browser data
-- Check local storage (see Browser DevTools above)
-- Note: Private/Incognito browsing clears data on close
+**AUREV Clothing**
+- 📱 Phone: +1 (555) 123-4567
+- 📧 Email: info@aurev.com
+- 📍 Address: 123 Fashion Street, Style City
 
-### Modal Not Opening
-- Check browser console for JavaScript errors
-- Ensure JavaScript is enabled
-- Try refreshing the page
-
-## Performance
-
-- **Fast**: Pure vanilla JavaScript, no framework overhead
-- **Lightweight**: ~50KB total (HTML + CSS + JS)
-- **Efficient**: Optimized DOM rendering
-- **Responsive**: Under 100ms for typical operations
-
-## Security Notes
-
-- **Local Storage Only**: No data sent to servers
-- **Client-Side Processing**: All logic runs in browser
-- **HTML Escaping**: Prevents XSS attacks
-- **No External Dependencies**: Except Font Awesome CDN
-
-## License
+## 📄 License
 
 Free to use and modify for personal or commercial projects.
 
-## Getting Started
-
-1. **Download Files**: Get index.html, styles.css, and script.js
-2. **Create Folder**: Create a directory for your app
-3. **Open in Browser**: Double-click index.html or use live server
-4. **Start Using**: Add your first task!
-
-## Deployment
-
-### GitHub Pages
-1. Create a GitHub repository
-2. Upload the three files
-3. Go to Settings → Pages
-4. Select main branch as source
-5. Your app is live!
-
-### Netlify
-1. Drag and drop your files
-2. App is instantly deployed
-3. Get a live URL
-
-### Any Web Host
-1. Upload files via FTP
-2. Access via your domain
-3. Works immediately
-
 ---
 
-**Version**: 1.0
+**Version**: 2.0 (E-Commerce Edition)
 **Last Updated**: May 27, 2026
 
-Made with ❤️ for productivity lovers everywhere! 📋✨
+Made with ❤️ for fashion enthusiasts everywhere! 👗👖✨
