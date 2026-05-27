@@ -3,125 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To-Do List Application</title>
+    <title>AUREV - Premium Clothing Collection</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <header class="header">
-            <div class="header-content">
-                <h1><i class="fas fa-tasks"></i> My To-Do List</h1>
-                <p class="subtitle">Stay organized and productive</p>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <i class="fas fa-shopping-bag"></i>
+                <span>AUREV</span>
             </div>
-        </header>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link active">HOME</a></li>
+                <li><a href="#tshirts" class="nav-link">T-SHIRTS</a></li>
+                <li><a href="#jeans" class="nav-link">JEANS</a></li>
+                <li><a href="#contact" class="nav-link">CONTACT</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Input Section -->
-            <section class="input-section">
-                <div class="input-wrapper">
-                    <input 
-                        type="text" 
-                        id="todoInput" 
-                        class="todo-input" 
-                        placeholder="Add a new task..."
-                        autocomplete="off"
-                    >
-                    <button id="addBtn" class="add-btn">
-                        <i class="fas fa-plus"></i> Add Task
-                    </button>
-                </div>
-                <div class="priority-selector">
-                    <label for="prioritySelect">Priority:</label>
-                    <select id="prioritySelect" class="priority-select">
-                        <option value="low">Low</option>
-                        <option value="medium" selected>Medium</option>
-                        <option value="high">High</option>
-                    </select>
-                </div>
-            </section>
+    <!-- Hero Section -->
+    <header class="hero" id="home">
+        <div class="hero-content">
+            <h1>AUREV</h1>
+            <p>Premium Quality Clothing for Modern Style</p>
+            <button class="cta-btn">Shop Now</button>
+        </div>
+    </header>
 
-            <!-- Stats Section -->
-            <section class="stats-section">
-                <div class="stat-card">
-                    <span class="stat-label">Total</span>
-                    <span class="stat-value" id="totalCount">0</span>
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- T-Shirts Section -->
+        <section class="products-section" id="tshirts">
+            <div class="section-header">
+                <h2>T-SHIRTS</h2>
+                <p>Comfortable and Stylish</p>
+            </div>
+            <div class="products-grid">
+                <!-- Red T-Shirt -->
+                <div class="product-card">
+                    <div class="product-image red-bg">
+                        <i class="fas fa-shirt"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3>Classic Red Tee</h3>
+                        <p class="color-tag">Red</p>
+                        <p class="price">$29.99</p>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <span class="stat-label">Completed</span>
-                    <span class="stat-value" id="completedCount">0</span>
+
+                <!-- Blue T-Shirt -->
+                <div class="product-card">
+                    <div class="product-image blue-bg">
+                        <i class="fas fa-shirt"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3>Ocean Blue Tee</h3>
+                        <p class="color-tag">Blue</p>
+                        <p class="price">$29.99</p>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <span class="stat-label">Pending</span>
-                    <span class="stat-value" id="pendingCount">0</span>
+
+                <!-- White T-Shirt -->
+                <div class="product-card">
+                    <div class="product-image white-bg">
+                        <i class="fas fa-shirt"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3>Pure White Tee</h3>
+                        <p class="color-tag">White</p>
+                        <p class="price">$29.99</p>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- Filter Section -->
-            <section class="filter-section">
-                <button class="filter-btn active" data-filter="all">
-                    <i class="fas fa-list"></i> All
-                </button>
-                <button class="filter-btn" data-filter="pending">
-                    <i class="fas fa-hourglass-half"></i> Pending
-                </button>
-                <button class="filter-btn" data-filter="completed">
-                    <i class="fas fa-check-circle"></i> Completed
-                </button>
-                <button class="filter-btn" data-filter="high">
-                    <i class="fas fa-exclamation-circle"></i> High Priority
-                </button>
-            </section>
-
-            <!-- Tasks List -->
-            <section class="tasks-section">
-                <div id="tasksList" class="tasks-list">
-                    <!-- Tasks will be rendered here -->
+        <!-- Jeans Section -->
+        <section class="products-section" id="jeans">
+            <div class="section-header">
+                <h2>JEANS</h2>
+                <p>Perfect Fit, Timeless Style</p>
+            </div>
+            <div class="products-grid">
+                <!-- Red Jeans -->
+                <div class="product-card">
+                    <div class="product-image red-bg">
+                        <i class="fas fa-pants"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3>Crimson Jeans</h3>
+                        <p class="color-tag">Red</p>
+                        <p class="price">$59.99</p>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
                 </div>
-                <div id="emptyState" class="empty-state">
-                    <i class="fas fa-inbox"></i>
-                    <p>No tasks yet. Add one to get started!</p>
+
+                <!-- Blue Jeans -->
+                <div class="product-card">
+                    <div class="product-image blue-bg">
+                        <i class="fas fa-pants"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3>Classic Blue Denim</h3>
+                        <p class="color-tag">Blue</p>
+                        <p class="price">$59.99</p>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
                 </div>
-            </section>
 
-            <!-- Action Buttons -->
-            <section class="action-buttons">
-                <button id="clearCompletedBtn" class="action-btn clear-completed-btn">
-                    <i class="fas fa-trash-alt"></i> Clear Completed
-                </button>
-                <button id="deleteAllBtn" class="action-btn delete-all-btn">
-                    <i class="fas fa-broom"></i> Clear All
-                </button>
-            </section>
-        </main>
+                <!-- White Jeans -->
+                <div class="product-card">
+                    <div class="product-image white-bg">
+                        <i class="fas fa-pants"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3>Elegant White Denim</h3>
+                        <p class="color-tag">White</p>
+                        <p class="price">$59.99</p>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        <!-- Footer -->
-        <footer class="footer">
-            <p>&copy; 2026 To-Do List Application | Stay productive, stay organized</p>
-        </footer>
-    </div>
+        <!-- Contact Section -->
+        <section class="contact-section" id="contact">
+            <div class="contact-container">
+                <h2>Get in Touch</h2>
+                <p>Questions? We'd love to hear from you!</p>
+                <div class="contact-info">
+                    <div class="info-card">
+                        <i class="fas fa-phone"></i>
+                        <h3>Phone</h3>
+                        <p>+1 (555) 123-4567</p>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-envelope"></i>
+                        <h3>Email</h3>
+                        <p>info@aurev.com</p>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <h3>Address</h3>
+                        <p>123 Fashion Street, Style City</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
-    <!-- Edit Modal -->
-    <div id="editModal" class="modal">
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>AUREV</h3>
+                <p>Premium clothing for the modern lifestyle.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#tshirts">T-Shirts</a></li>
+                    <li><a href="#jeans">Jeans</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 AUREV Clothing. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Shopping Cart Modal -->
+    <div id="cartModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Edit Task</h2>
+                <h2>Shopping Cart</h2>
                 <button class="modal-close">&times;</button>
             </div>
             <div class="modal-body">
-                <input type="text" id="editInput" class="edit-input" placeholder="Enter task description">
-                <label for="editPriority">Priority:</label>
-                <select id="editPriority" class="priority-select">
-                    <option value="low">Low</option>
-                    <option value="medium" selected>Medium</option>
-                    <option value="high">High</option>
-                </select>
+                <div id="cartItems" class="cart-items">
+                    <p class="empty-cart">Your cart is empty</p>
+                </div>
             </div>
             <div class="modal-footer">
-                <button id="cancelEditBtn" class="btn btn-secondary">Cancel</button>
-                <button id="saveEditBtn" class="btn btn-primary">Save Changes</button>
+                <p class="cart-total">Total: $0.00</p>
+                <button class="btn btn-primary">Checkout</button>
             </div>
         </div>
     </div>

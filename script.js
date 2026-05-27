@@ -1,266 +1,301 @@
 // ===========================
-// TO-DO LIST APPLICATION
-// Local Storage & DOM Management
+// AUREV CLOTHING SHOP
+// E-Commerce Functionality
 // ===========================
 
 // DOM Elements
-const todoInput = document.getElementById('todoInput');
-const addBtn = document.getElementById('addBtn');
-const tasksList = document.getElementById('tasksList');
-const emptyState = document.getElementById('emptyState');
-const prioritySelect = document.getElementById('prioritySelect');
-const filterBtns = document.querySelectorAll('.filter-btn');
-const clearCompletedBtn = document.getElementById('clearCompletedBtn');
-const deleteAllBtn = document.getElementById('deleteAllBtn');
-const totalCount = document.getElementById('totalCount');
-const completedCount = document.getElementById('completedCount');
-const pendingCount = document.getElementById('pendingCount');
-const editModal = document.getElementById('editModal');
-const editInput = document.getElementById('editInput');
-const editPriority = document.getElementById('editPriority');
-const saveEditBtn = document.getElementById('saveEditBtn');
-const cancelEditBtn = document.getElementById('cancelEditBtn');
-const modalClose = document.querySelector('.modal-close');
+const hamburger = document.querySelector('.hamburger');
+const navMenu = document.querySelector('.nav-menu');
+const navLinks = document.querySelectorAll('.nav-link');
+const addToCartBtns = document.querySelectorAll('.add-to-cart');
+const cartModal = document.getElementById('cartModal');
+const cartModalClose = document.querySelector('.modal-close');
+const ctaBtn = document.querySelector('.cta-btn');
 
-// State
-let tasks = [];
-let currentFilter = 'all';
-let editingTaskId = null;
+// Shopping Cart State
+let cart = [];
 
 // ===== INITIALIZATION =====
 document.addEventListener('DOMContentLoaded', () => {
-    loadTasks();
-    renderTasks();
-    updateStats();
+    loadCart();
+    setupEventListeners();
 });
 
 // ===== EVENT LISTENERS =====
-addBtn.addEventListener('click', addTask);
-todoInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') addTask();
-});
+function setupEventListeners() {
+    // Hamburger menu toggle
+    hamburger.addEventListener('click', toggleMenu);
 
-clearCompletedBtn.addEventListener('click', clearCompleted);
-deleteAllBtn.addEventListener('click', deleteAll);
-
-filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        filterBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentFilter = btn.dataset.filter;
-        renderTasks();
+    // Close menu when nav link is clicked
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            navMenu.classList.remove('active');
+            updateActiveLink(link);
+        });
     });
-});
 
-saveEditBtn.addEventListener('click', saveEdit);
-cancelEditBtn.addEventListener('click', closeEditModal);
-modalClose.addEventListener('click', closeEditModal);
-editModal.addEventListener('click', (e) => {
-    if (e.target === editModal) closeEditModal();
-});
+    // Add to cart buttons
+    addToCartBtns.forEach(btn => {
+        btn.addEventListener('click', handleAddToCart);
+    });
 
-// ===== TASK FUNCTIONS =====
-function addTask() {
-    const text = todoInput.value.trim();
-    const priority = prioritySelect.value;
+    // Cart modal
+    cartModalClose.addEventListener('click', closeCart);
+    cartModal.addEventListener('click', (e) => {
+        if (e.target === cartModal) closeCart();
+    });
 
-    if (text === '') {
-        alert('Please enter a task!');
-        return;
-    }
+    // CTA Button
+    ctaBtn.addEventListener('click', () => {
+        document.getElementById('tshirts').scrollIntoView({ behavior: 'smooth' });
+    });
+}
 
-    const task = {
+// ===== NAVIGATION =====
+function toggleMenu() {
+    navMenu.classList.toggle('active');
+}
+
+function updateActiveLink(clickedLink) {
+    navLinks.forEach(link => link.classList.remove('active'));
+    clickedLink.classList.add('active');
+}
+
+// ===== SHOPPING CART =====
+function handleAddToCart(e) {
+    const productCard = e.target.closest('.product-card');
+    const productName = productCard.querySelector('h3').textContent;
+    const productPrice = parseFloat(productCard.querySelector('.price').textContent.replace('$', ''));
+    const colorTag = productCard.querySelector('.color-tag').textContent;
+
+    const cartItem = {
         id: Date.now(),
-        text: text,
-        completed: false,
-        priority: priority,
-        date: new Date().toLocaleDateString()
+        name: productName,
+        price: productPrice,
+        color: colorTag,
+        quantity: 1
     };
 
-    tasks.unshift(task);
-    todoInput.value = '';
-    prioritySelect.value = 'medium';
-    saveTasks();
-    renderTasks();
-    updateStats();
-}
-
-function deleteTask(id) {
-    if (confirm('Are you sure you want to delete this task?')) {
-        tasks = tasks.filter(task => task.id !== id);
-        saveTasks();
-        renderTasks();
-        updateStats();
+    // Check if item already exists in cart
+    const existingItem = cart.find(item => item.name === productName && item.color === colorTag);
+    
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push(cartItem);
     }
+
+    saveCart();
+    showNotification(`${productName} added to cart!`);
+    renderCart();
+    updateCartBadge();
 }
 
-function toggleTask(id) {
-    const task = tasks.find(task => task.id === id);
-    if (task) {
-        task.completed = !task.completed;
-        saveTasks();
-        renderTasks();
-        updateStats();
-    }
-}
+function renderCart() {
+    const cartItemsContainer = document.getElementById('cartItems');
+    const cartTotal = document.querySelector('.cart-total');
 
-function editTask(id) {
-    const task = tasks.find(task => task.id === id);
-    if (task) {
-        editingTaskId = id;
-        editInput.value = task.text;
-        editPriority.value = task.priority;
-        editModal.classList.add('show');
-        editInput.focus();
-    }
-}
-
-function saveEdit() {
-    const newText = editInput.value.trim();
-    const newPriority = editPriority.value;
-
-    if (newText === '') {
-        alert('Task cannot be empty!');
+    if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<p class="empty-cart">Your cart is empty</p>';
+        cartTotal.textContent = 'Total: $0.00';
         return;
     }
 
-    const task = tasks.find(task => task.id === editingTaskId);
-    if (task) {
-        task.text = newText;
-        task.priority = newPriority;
-        saveTasks();
-        renderTasks();
-        updateStats();
-        closeEditModal();
-    }
-}
-
-function closeEditModal() {
-    editModal.classList.remove('show');
-    editingTaskId = null;
-    editInput.value = '';
-    editPriority.value = 'medium';
-}
-
-function clearCompleted() {
-    if (tasks.filter(task => task.completed).length === 0) {
-        alert('No completed tasks to clear!');
-        return;
-    }
-
-    if (confirm('Remove all completed tasks?')) {
-        tasks = tasks.filter(task => !task.completed);
-        saveTasks();
-        renderTasks();
-        updateStats();
-    }
-}
-
-function deleteAll() {
-    if (tasks.length === 0) {
-        alert('No tasks to delete!');
-        return;
-    }
-
-    if (confirm('Delete all tasks? This cannot be undone!')) {
-        tasks = [];
-        saveTasks();
-        renderTasks();
-        updateStats();
-    }
-}
-
-// ===== RENDERING =====
-function renderTasks() {
-    tasksList.innerHTML = '';
-
-    let filteredTasks = tasks.filter(task => {
-        if (currentFilter === 'all') return true;
-        if (currentFilter === 'pending') return !task.completed;
-        if (currentFilter === 'completed') return task.completed;
-        if (currentFilter === 'high') return task.priority === 'high';
-        return true;
-    });
-
-    if (filteredTasks.length === 0) {
-        emptyState.classList.add('show');
-        return;
-    }
-
-    emptyState.classList.remove('show');
-
-    filteredTasks.forEach(task => {
-        const taskElement = createTaskElement(task);
-        tasksList.appendChild(taskElement);
-    });
-}
-
-function createTaskElement(task) {
-    const div = document.createElement('div');
-    div.className = `task-item ${task.priority}-priority ${task.completed ? 'completed' : ''}`;
-    div.setAttribute('data-id', task.id);
-
-    div.innerHTML = `
-        <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask(${task.id})">
-        <div class="task-content">
-            <div class="task-text">${escapeHtml(task.text)}</div>
-            <div class="task-meta">
-                <span class="task-priority ${task.priority}">${task.priority}</span>
-                <span class="task-date">📅 ${task.date}</span>
+    cartItemsContainer.innerHTML = cart.map(item => `
+        <div class="cart-item" style="padding: 15px; border-bottom: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <p style="font-weight: 700; margin-bottom: 5px;">${item.name}</p>
+                <p style="font-size: 12px; color: #666;">${item.color} | Qty: ${item.quantity}</p>
+            </div>
+            <div style="text-align: right;">
+                <p style="font-weight: 700; color: #DC143C; margin-bottom: 8px;">$${(item.price * item.quantity).toFixed(2)}</p>
+                <button onclick="removeFromCart(${item.id})" style="background: #ff6b6b; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px;">Remove</button>
             </div>
         </div>
-        <div class="task-actions">
-            <button class="task-btn edit-btn" onclick="editTask(${task.id})" title="Edit task">
-                <i class="fas fa-edit"></i>
-            </button>
-            <button class="task-btn delete-btn" onclick="deleteTask(${task.id})" title="Delete task">
-                <i class="fas fa-trash-alt"></i>
-            </button>
-        </div>
-    `;
+    `).join('');
 
-    return div;
+    // Calculate total
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    cartTotal.textContent = `Total: $${total.toFixed(2)}`;
 }
 
-// ===== STATISTICS =====
-function updateStats() {
-    const total = tasks.length;
-    const completed = tasks.filter(task => task.completed).length;
-    const pending = total - completed;
+function removeFromCart(id) {
+    cart = cart.filter(item => item.id !== id);
+    saveCart();
+    renderCart();
+    updateCartBadge();
+    showNotification('Item removed from cart');
+}
 
-    totalCount.textContent = total;
-    completedCount.textContent = completed;
-    pendingCount.textContent = pending;
+function openCart() {
+    cartModal.classList.add('show');
+    renderCart();
+}
+
+function closeCart() {
+    cartModal.classList.remove('show');
 }
 
 // ===== LOCAL STORAGE =====
-function saveTasks() {
-    localStorage.setItem('todoTasks', JSON.stringify(tasks));
+function saveCart() {
+    localStorage.setItem('aurevCart', JSON.stringify(cart));
 }
 
-function loadTasks() {
-    const savedTasks = localStorage.getItem('todoTasks');
-    if (savedTasks) {
+function loadCart() {
+    const savedCart = localStorage.getItem('aurevCart');
+    if (savedCart) {
         try {
-            tasks = JSON.parse(savedTasks);
+            cart = JSON.parse(savedCart);
         } catch (error) {
-            console.error('Error loading tasks:', error);
-            tasks = [];
+            console.error('Error loading cart:', error);
+            cart = [];
         }
     }
 }
 
-// ===== UTILITY FUNCTIONS =====
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
+// ===== NOTIFICATIONS =====
+function showNotification(message) {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #DC143C 0%, #1E3A8A 100%);
+        color: white;
+        padding: 15px 25px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        z-index: 2000;
+        animation: slideInUp 0.3s ease;
+        font-weight: 600;
+    `;
+    notification.textContent = message;
+
+    document.body.appendChild(notification);
+
+    // Remove after 3 seconds
+    setTimeout(() => {
+        notification.style.animation = 'slideOutDown 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
 }
 
-// ===== KEYBOARD SHORTCUTS =====
-document.addEventListener('keydown', (e) => {
-    // Escape key closes modal
-    if (e.key === 'Escape' && editModal.classList.contains('show')) {
-        closeEditModal();
-    }
+// ===== SMOOTH SCROLL FOR NAV LINKS =====
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        if (href !== '#' && document.querySelector(href)) {
+            e.preventDefault();
+            document.querySelector(href).scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+    });
 });
+
+// ===== ADD CART ICON TO NAV =====
+const cartIcon = document.createElement('div');
+cartIcon.style.cssText = `
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #DC143C 0%, #1E3A8A 100%);
+    color: white;
+    font-weight: 700;
+    position: relative;
+`;
+
+const cartBadge = document.createElement('span');
+cartBadge.id = 'cartBadge';
+cartBadge.style.cssText = `
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #ff6b6b;
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    display: none;
+`;
+
+cartIcon.innerHTML = `<i class="fas fa-shopping-bag"></i> <span>Cart</span>`;
+cartIcon.appendChild(cartBadge);
+cartIcon.addEventListener('click', openCart);
+
+// Insert cart icon after nav menu
+const navContainer = document.querySelector('.navbar-container');
+navContainer.appendChild(cartIcon);
+
+// Update cart badge
+function updateCartBadge() {
+    const badge = document.getElementById('cartBadge');
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    
+    if (totalItems > 0) {
+        badge.textContent = totalItems;
+        badge.style.display = 'flex';
+    } else {
+        badge.style.display = 'none';
+    }
+}
+
+// Initialize on load
+window.addEventListener('load', () => {
+    updateCartBadge();
+});
+
+// ===== ADDITIONAL ANIMATIONS STYLES =====
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideOutDown {
+        from {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        to {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+    }
+`;
+document.head.appendChild(style);
+
+// ===== CHECKOUT FUNCTIONALITY =====
+const checkoutBtn = document.querySelector('.btn-primary');
+if (checkoutBtn) {
+    checkoutBtn.addEventListener('click', () => {
+        if (cart.length === 0) {
+            alert('Your cart is empty!');
+            return;
+        }
+        const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        alert(`Thank you for your order! Total: $${total.toFixed(2)}\n\nThis is a demo site. In a real store, this would redirect to payment.`);
+        cart = [];
+        saveCart();
+        closeCart();
+        updateCartBadge();
+        showNotification('Order placed successfully!');
+    });
+}
