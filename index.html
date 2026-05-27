@@ -3,139 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AUREV - Premium Clothing Collection</title>
+    <title>To-Do List Application</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Navigation Header -->
-    <header class="header">
-        <div class="container">
-            <div class="logo">
-                <img src="assets/aurev-logo.svg" alt="AUREV Logo">
-                <h1>AUREV</h1>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-tasks"></i> My To-Do List</h1>
+                <p class="subtitle">Stay organized and productive</p>
             </div>
-            <nav class="navigation">
-                <a href="#home" class="nav-link">Home</a>
-                <a href="#shop" class="nav-link">Shop</a>
-                <a href="#about" class="nav-link">About</a>
-                <a href="#contact" class="nav-link">Contact</a>
-                <a href="#cart" class="nav-link cart-icon">🛒 Cart</a>
-            </nav>
-        </div>
-    </header>
+        </header>
 
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="hero-content">
-            <h2>Premium Clothing for the Refined</h2>
-            <p>Discover our exclusive collection of elegant and timeless pieces</p>
-            <button class="cta-button">Shop Now</button>
-        </div>
-    </section>
-
-    <!-- Featured Products -->
-    <section class="featured" id="shop">
-        <div class="container">
-            <h2>Featured Collection</h2>
-            <div class="products-grid">
-                <!-- Product 1 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="assets/product-1.jpg" alt="Product 1">
-                    </div>
-                    <h3>Premium T-Shirt</h3>
-                    <p class="price">$49.99</p>
-                    <p class="description">High-quality cotton blend</p>
-                    <button class="add-to-cart">Add to Cart</button>
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Input Section -->
+            <section class="input-section">
+                <div class="input-wrapper">
+                    <input 
+                        type="text" 
+                        id="todoInput" 
+                        class="todo-input" 
+                        placeholder="Add a new task..."
+                        autocomplete="off"
+                    >
+                    <button id="addBtn" class="add-btn">
+                        <i class="fas fa-plus"></i> Add Task
+                    </button>
                 </div>
-
-                <!-- Product 2 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="assets/product-2.jpg" alt="Product 2">
-                    </div>
-                    <h3>Classic Hoodie</h3>
-                    <p class="price">$79.99</p>
-                    <p class="description">Comfortable everyday wear</p>
-                    <button class="add-to-cart">Add to Cart</button>
+                <div class="priority-selector">
+                    <label for="prioritySelect">Priority:</label>
+                    <select id="prioritySelect" class="priority-select">
+                        <option value="low">Low</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="high">High</option>
+                    </select>
                 </div>
+            </section>
 
-                <!-- Product 3 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="assets/product-3.jpg" alt="Product 3">
-                    </div>
-                    <h3>Elegant Jacket</h3>
-                    <p class="price">$129.99</p>
-                    <p class="description">Timeless style statement</p>
-                    <button class="add-to-cart">Add to Cart</button>
+            <!-- Stats Section -->
+            <section class="stats-section">
+                <div class="stat-card">
+                    <span class="stat-label">Total</span>
+                    <span class="stat-value" id="totalCount">0</span>
                 </div>
+                <div class="stat-card">
+                    <span class="stat-label">Completed</span>
+                    <span class="stat-value" id="completedCount">0</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Pending</span>
+                    <span class="stat-value" id="pendingCount">0</span>
+                </div>
+            </section>
 
-                <!-- Product 4 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="assets/product-4.jpg" alt="Product 4">
-                    </div>
-                    <h3>Fitted Pants</h3>
-                    <p class="price">$89.99</p>
-                    <p class="description">Perfect fit and comfort</p>
-                    <button class="add-to-cart">Add to Cart</button>
+            <!-- Filter Section -->
+            <section class="filter-section">
+                <button class="filter-btn active" data-filter="all">
+                    <i class="fas fa-list"></i> All
+                </button>
+                <button class="filter-btn" data-filter="pending">
+                    <i class="fas fa-hourglass-half"></i> Pending
+                </button>
+                <button class="filter-btn" data-filter="completed">
+                    <i class="fas fa-check-circle"></i> Completed
+                </button>
+                <button class="filter-btn" data-filter="high">
+                    <i class="fas fa-exclamation-circle"></i> High Priority
+                </button>
+            </section>
+
+            <!-- Tasks List -->
+            <section class="tasks-section">
+                <div id="tasksList" class="tasks-list">
+                    <!-- Tasks will be rendered here -->
                 </div>
+                <div id="emptyState" class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <p>No tasks yet. Add one to get started!</p>
+                </div>
+            </section>
+
+            <!-- Action Buttons -->
+            <section class="action-buttons">
+                <button id="clearCompletedBtn" class="action-btn clear-completed-btn">
+                    <i class="fas fa-trash-alt"></i> Clear Completed
+                </button>
+                <button id="deleteAllBtn" class="action-btn delete-all-btn">
+                    <i class="fas fa-broom"></i> Clear All
+                </button>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2026 To-Do List Application | Stay productive, stay organized</p>
+        </footer>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Task</h2>
+                <button class="modal-close">&times;</button>
             </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section class="about" id="about">
-        <div class="container">
-            <h2>About AUREV</h2>
-            <p>AUREV represents the pinnacle of modern fashion. We believe in quality, sustainability, and timeless design. Every piece in our collection is carefully curated to ensure you look and feel your best.</p>
-        </div>
-    </section>
-
-    <!-- Newsletter Signup -->
-    <section class="newsletter">
-        <div class="container">
-            <h2>Stay Updated</h2>
-            <p>Subscribe to get exclusive offers and new collection launches</p>
-            <form class="newsletter-form">
-                <input type="email" placeholder="Enter your email" required>
-                <button type="submit">Subscribe</button>
-            </form>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer" id="contact">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h4>Contact</h4>
-                    <p>Email: info@aurev.com</p>
-                    <p>Phone: +1 (555) 123-4567</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Follow Us</h4>
-                    <p>
-                        <a href="#">Instagram</a> | 
-                        <a href="#">Facebook</a> | 
-                        <a href="#">Twitter</a>
-                    </p>
-                </div>
-                <div class="footer-section">
-                    <h4>Quick Links</h4>
-                    <p>
-                        <a href="#">Shipping Info</a> | 
-                        <a href="#">Returns</a> | 
-                        <a href="#">Privacy</a>
-                    </p>
-                </div>
+            <div class="modal-body">
+                <input type="text" id="editInput" class="edit-input" placeholder="Enter task description">
+                <label for="editPriority">Priority:</label>
+                <select id="editPriority" class="priority-select">
+                    <option value="low">Low</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="high">High</option>
+                </select>
             </div>
-            <div class="copyright">
-                <p>&copy; 2026 AUREV. All rights reserved.</p>
+            <div class="modal-footer">
+                <button id="cancelEditBtn" class="btn btn-secondary">Cancel</button>
+                <button id="saveEditBtn" class="btn btn-primary">Save Changes</button>
             </div>
         </div>
-    </footer>
+    </div>
 
     <script src="script.js"></script>
 </body>

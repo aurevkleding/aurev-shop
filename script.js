@@ -1,132 +1,266 @@
 // ===========================
-// AUREV WEBSHOP JavaScript
+// TO-DO LIST APPLICATION
+// Local Storage & DOM Management
 // ===========================
 
-// Shopping cart functionality
-let cart = [];
+// DOM Elements
+const todoInput = document.getElementById('todoInput');
+const addBtn = document.getElementById('addBtn');
+const tasksList = document.getElementById('tasksList');
+const emptyState = document.getElementById('emptyState');
+const prioritySelect = document.getElementById('prioritySelect');
+const filterBtns = document.querySelectorAll('.filter-btn');
+const clearCompletedBtn = document.getElementById('clearCompletedBtn');
+const deleteAllBtn = document.getElementById('deleteAllBtn');
+const totalCount = document.getElementById('totalCount');
+const completedCount = document.getElementById('completedCount');
+const pendingCount = document.getElementById('pendingCount');
+const editModal = document.getElementById('editModal');
+const editInput = document.getElementById('editInput');
+const editPriority = document.getElementById('editPriority');
+const saveEditBtn = document.getElementById('saveEditBtn');
+const cancelEditBtn = document.getElementById('cancelEditBtn');
+const modalClose = document.querySelector('.modal-close');
 
-// Add to cart button event listeners
-document.addEventListener('DOMContentLoaded', function() {
-    const addToCartButtons = document.querySelectorAll('.add-to-cart');
-    
-    addToCartButtons.forEach((button, index) => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            addToCart(index + 1);
-        });
-    });
+// State
+let tasks = [];
+let currentFilter = 'all';
+let editingTaskId = null;
 
-    // Newsletter form submission
-    const newsletterForm = document.querySelector('.newsletter-form');
-    if (newsletterForm) {
-        newsletterForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Thank you for subscribing to AUREV!');
-            newsletterForm.reset();
-        });
-    }
+// ===== INITIALIZATION =====
+document.addEventListener('DOMContentLoaded', () => {
+    loadTasks();
+    renderTasks();
+    updateStats();
+});
 
-    // Smooth scrolling for navigation links
-    const navLinks = document.querySelectorAll('a[href^="#"]');
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            if (this.getAttribute('href') !== '#cart') {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                const targetSection = document.querySelector(targetId);
-                if (targetSection) {
-                    targetSection.scrollIntoView({ behavior: 'smooth' });
-                }
-            }
-        });
+// ===== EVENT LISTENERS =====
+addBtn.addEventListener('click', addTask);
+todoInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') addTask();
+});
+
+clearCompletedBtn.addEventListener('click', clearCompleted);
+deleteAllBtn.addEventListener('click', deleteAll);
+
+filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        renderTasks();
     });
 });
 
-// Add item to cart
-function addToCart(productId) {
-    const productCard = document.querySelectorAll('.product-card')[productId - 1];
-    const productName = productCard.querySelector('h3').textContent;
-    const productPrice = parseFloat(productCard.querySelector('.price').textContent.replace('$', ''));
+saveEditBtn.addEventListener('click', saveEdit);
+cancelEditBtn.addEventListener('click', closeEditModal);
+modalClose.addEventListener('click', closeEditModal);
+editModal.addEventListener('click', (e) => {
+    if (e.target === editModal) closeEditModal();
+});
 
-    const cartItem = {
-        id: productId,
-        name: productName,
-        price: productPrice,
-        quantity: 1
+// ===== TASK FUNCTIONS =====
+function addTask() {
+    const text = todoInput.value.trim();
+    const priority = prioritySelect.value;
+
+    if (text === '') {
+        alert('Please enter a task!');
+        return;
+    }
+
+    const task = {
+        id: Date.now(),
+        text: text,
+        completed: false,
+        priority: priority,
+        date: new Date().toLocaleDateString()
     };
 
-    // Check if item already in cart
-    const existingItem = cart.find(item => item.id === productId);
-    if (existingItem) {
-        existingItem.quantity++;
-    } else {
-        cart.push(cartItem);
+    tasks.unshift(task);
+    todoInput.value = '';
+    prioritySelect.value = 'medium';
+    saveTasks();
+    renderTasks();
+    updateStats();
+}
+
+function deleteTask(id) {
+    if (confirm('Are you sure you want to delete this task?')) {
+        tasks = tasks.filter(task => task.id !== id);
+        saveTasks();
+        renderTasks();
+        updateStats();
+    }
+}
+
+function toggleTask(id) {
+    const task = tasks.find(task => task.id === id);
+    if (task) {
+        task.completed = !task.completed;
+        saveTasks();
+        renderTasks();
+        updateStats();
+    }
+}
+
+function editTask(id) {
+    const task = tasks.find(task => task.id === id);
+    if (task) {
+        editingTaskId = id;
+        editInput.value = task.text;
+        editPriority.value = task.priority;
+        editModal.classList.add('show');
+        editInput.focus();
+    }
+}
+
+function saveEdit() {
+    const newText = editInput.value.trim();
+    const newPriority = editPriority.value;
+
+    if (newText === '') {
+        alert('Task cannot be empty!');
+        return;
     }
 
-    showNotification(`${productName} added to cart!`);
-    updateCartCount();
-    saveCart();
+    const task = tasks.find(task => task.id === editingTaskId);
+    if (task) {
+        task.text = newText;
+        task.priority = newPriority;
+        saveTasks();
+        renderTasks();
+        updateStats();
+        closeEditModal();
+    }
 }
 
-// Update cart count in header
-function updateCartCount() {
-    const cartIcon = document.querySelector('.cart-icon');
-    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    cartIcon.textContent = `🛒 Cart (${totalItems})`;
+function closeEditModal() {
+    editModal.classList.remove('show');
+    editingTaskId = null;
+    editInput.value = '';
+    editPriority.value = 'medium';
 }
 
-// Show notification
-function showNotification(message) {
-    const notification = document.createElement('div');
-    notification.textContent = message;
-    notification.style.cssText = `
-        position: fixed;
-        top: 80px;
-        right: 20px;
-        background-color: #d4a574;
-        color: #000;
-        padding: 15px 20px;
-        border-radius: 4px;
-        font-weight: 600;
-        z-index: 2000;
-        animation: slideIn 0.3s ease;
+function clearCompleted() {
+    if (tasks.filter(task => task.completed).length === 0) {
+        alert('No completed tasks to clear!');
+        return;
+    }
+
+    if (confirm('Remove all completed tasks?')) {
+        tasks = tasks.filter(task => !task.completed);
+        saveTasks();
+        renderTasks();
+        updateStats();
+    }
+}
+
+function deleteAll() {
+    if (tasks.length === 0) {
+        alert('No tasks to delete!');
+        return;
+    }
+
+    if (confirm('Delete all tasks? This cannot be undone!')) {
+        tasks = [];
+        saveTasks();
+        renderTasks();
+        updateStats();
+    }
+}
+
+// ===== RENDERING =====
+function renderTasks() {
+    tasksList.innerHTML = '';
+
+    let filteredTasks = tasks.filter(task => {
+        if (currentFilter === 'all') return true;
+        if (currentFilter === 'pending') return !task.completed;
+        if (currentFilter === 'completed') return task.completed;
+        if (currentFilter === 'high') return task.priority === 'high';
+        return true;
+    });
+
+    if (filteredTasks.length === 0) {
+        emptyState.classList.add('show');
+        return;
+    }
+
+    emptyState.classList.remove('show');
+
+    filteredTasks.forEach(task => {
+        const taskElement = createTaskElement(task);
+        tasksList.appendChild(taskElement);
+    });
+}
+
+function createTaskElement(task) {
+    const div = document.createElement('div');
+    div.className = `task-item ${task.priority}-priority ${task.completed ? 'completed' : ''}`;
+    div.setAttribute('data-id', task.id);
+
+    div.innerHTML = `
+        <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask(${task.id})">
+        <div class="task-content">
+            <div class="task-text">${escapeHtml(task.text)}</div>
+            <div class="task-meta">
+                <span class="task-priority ${task.priority}">${task.priority}</span>
+                <span class="task-date">📅 ${task.date}</span>
+            </div>
+        </div>
+        <div class="task-actions">
+            <button class="task-btn edit-btn" onclick="editTask(${task.id})" title="Edit task">
+                <i class="fas fa-edit"></i>
+            </button>
+            <button class="task-btn delete-btn" onclick="deleteTask(${task.id})" title="Delete task">
+                <i class="fas fa-trash-alt"></i>
+            </button>
+        </div>
     `;
 
-    document.body.appendChild(notification);
-    setTimeout(() => {
-        notification.remove();
-    }, 3000);
+    return div;
 }
 
-// Save cart to localStorage
-function saveCart() {
-    localStorage.setItem('aurevCart', JSON.stringify(cart));
+// ===== STATISTICS =====
+function updateStats() {
+    const total = tasks.length;
+    const completed = tasks.filter(task => task.completed).length;
+    const pending = total - completed;
+
+    totalCount.textContent = total;
+    completedCount.textContent = completed;
+    pendingCount.textContent = pending;
 }
 
-// Load cart from localStorage
-function loadCart() {
-    const savedCart = localStorage.getItem('aurevCart');
-    if (savedCart) {
-        cart = JSON.parse(savedCart);
-        updateCartCount();
-    }
+// ===== LOCAL STORAGE =====
+function saveTasks() {
+    localStorage.setItem('todoTasks', JSON.stringify(tasks));
 }
 
-// Call load cart on page load
-loadCart();
-
-// Add animation keyframes
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideIn {
-        from {
-            transform: translateX(400px);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
+function loadTasks() {
+    const savedTasks = localStorage.getItem('todoTasks');
+    if (savedTasks) {
+        try {
+            tasks = JSON.parse(savedTasks);
+        } catch (error) {
+            console.error('Error loading tasks:', error);
+            tasks = [];
         }
     }
-`;
-document.head.appendChild(style);
+}
+
+// ===== UTILITY FUNCTIONS =====
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// ===== KEYBOARD SHORTCUTS =====
+document.addEventListener('keydown', (e) => {
+    // Escape key closes modal
+    if (e.key === 'Escape' && editModal.classList.contains('show')) {
+        closeEditModal();
+    }
+});
